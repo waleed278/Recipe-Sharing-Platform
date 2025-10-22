@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Recipe</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <style>
+    body {
+      background-color: #f9f9f9;
+    }
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      margin-top: 40px;
+    }
+    .table img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    th, td {
+      text-align: center;
+      vertical-align: middle;
+    }
+    td.description {
+      white-space: normal;
+      word-wrap: break-word;
+      max-width: 300px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3 card">
+      <h2 class="text-center"><b>Add Recipe</b></h2>
+      <hr>
+
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="text-center mt-3">
+          <button type="submit" class="btn btn-success btn-block">Submit</button>
+        </div>
+        
+ {% if form.errors %} 
+ <ul> {% for field, errors in form.errors.items %} 
+  <li>{{ field }}: {{ errors|join:", " }}</li> 
+  {% endfor %} 
+</ul> 
+{% endif %}
+      </form>
+    </div>
+  </div>
+
+  <hr><br>
+
+  <h2 class="text-center"><b>Recipes List</b></h2>
+  <br>
+
+  <table class="table table-bordered table-striped table-hover">
+    <thead class="bg-primary text-white">
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Picture</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in s %}
+      <tr>
+        <td>{{ i.recipe_name }}</td>
+        <td class="description">{{ i.recipe_des }}</td>
+        <td>
+          {% if i.recipe_image %}
+            <img src="{{ i.recipe_image.url }}" alt="{{ i.recipe_name }}">
+          {% else %}
+            <span>No image</span>
+          {% endif %}
+        </td>
+        <td>
+          <a href="{% url 'update' i.id %}" class="btn btn-info btn-sm">Update</a>
+          <a href="{% url 'delete' i.id %}" class="btn btn-danger btn-sm">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="4" class="text-center">No recipes added yet.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>
