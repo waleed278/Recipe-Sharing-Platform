@@ -48,7 +48,9 @@
 
       <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
+        {{ form.media }}
         {{ form.as_p }}
+        
         <div class="text-center mt-3">
           <button type="submit" class="btn btn-success btn-block">Submit</button>
         </div>
@@ -81,7 +83,7 @@
       {% for i in s %}
       <tr>
         <td>{{ i.recipe_name }}</td>
-        <td class="description">{{ i.recipe_des }}</td>
+        <td class="description">{{ i.recipe_des |safe }}</td>
         <td>
           {% if i.recipe_image %}
             <img src="{{ i.recipe_image.url }}" alt="{{ i.recipe_name }}">

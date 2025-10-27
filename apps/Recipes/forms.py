@@ -2,6 +2,7 @@ from django import forms
 from .models import Recipe
 from django.core.validators import MinLengthValidator,MaxLengthValidator
 from django.core.exceptions import ValidationError
+from ckeditor.widgets import  CKEditorWidget
 
 def no_numbers(value):
     if any (char.isdigit() for char in value):
@@ -29,6 +30,7 @@ class RecipeForm(forms.ModelForm):
     
     validators= [MaxLengthValidator(50),no_numbers]
     )
+    recipe_des = forms.CharField(widget = CKEditorWidget())
     recipe_image = forms.ImageField(
         validators=[validate_image_size],
         widget=forms.ClearableFileInput(attrs={'class':'form-control'})
@@ -43,10 +45,8 @@ widgets = {
         'class': 'form-control',
         'placeholder' : 'Enter Recipe Name'
     }),
-    'recipe_des' : forms.Textarea(attrs={
-        'class' : 'form-control',
-        'placeholder' : 'Enter Recipe Description'
-    }),
+    
+    
     'recipe_image': forms.ClearableFileInput(attrs={
                 'class': 'form-control'
             }),
